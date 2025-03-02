@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Welcome</h2>
+<p id="welcomeMessage"></p>
+<p id="welcomeid"></p>
+<script>
+  $(document).ready(function () {
+      // Retrieve the user's name from sessionStorage
+      var userName = sessionStorage.getItem('userName');
+var userId = sessionStorage.getItem('userId');
+      if (userName) {
+          // Display the name on the page
+          $('#welcomeMessage').text('Hello, ' + userName);
+      } else {
+          // If no name is found, redirect to the login page
+          window.location.href = 'login.html';  // Replace with your login page URL
+      }
+
+      if (userId) {
+            // Display the ID on the page
+            $('#welcomeid').text('Welcome! Your user ID is: ' + userId);
+        } else {
+            // If no user ID is found, redirect to the login page
+            window.location.href = 'login.html';  // Replace with your login page URL
+        }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="GetData">
+</div>
+
+<!-- jQuery (full version, required for $.ajax) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS & Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    var Add = function () {
+        var events = function () {
+        };
+
+        var GetEvent = function () {
+            $.ajax({
+                url: "http://localhost:8080/api/jobs",
+                type: "GET",
+                success: function (response) {
+                    var htm = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Job Description</th>
+                                <th>Salary</th>
+                                <th>Department</th>
+                                <th>Job Status</th>
+                                <th>Location</th>
+                                <th>Posted By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
+
+                    $.each(response, function (index, data) {
+                        htm += `
+                        <tr>
+                            <td>${data.jobTitle}</td>
+                            <td>${data.jobDescription}</td>
+                            <td>${data.salary}</td>
+                            <td>${data.department}</td>
+                            <td>${data.jobStatus}</td>
+                            <td>${data.location}</td>
+                            <td>${data.postedBy}</td>
+                        </tr>
+                        `;
+                    });
+
+                    htm += `
+                        </tbody>
+                    </table>
+                    `;
+
+                    $('#GetData').html(htm);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        };
+
+        return {
+            init: function () {
+                events();
+                GetEvent();
+            },
+        };
+    }();
+
+    $(document).ready(function () {
+        Add.init();
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+</body>
+</html>

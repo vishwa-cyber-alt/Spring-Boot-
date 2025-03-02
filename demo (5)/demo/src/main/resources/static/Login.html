@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="login.js"></script> <!-- Link to the external JS file -->
+</head>
+<body>
+
+<h2>Login</h2>
+<form id="loginForm">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <button type="submit">Login</button>
+</form>
+
+<div id="responseMessage" style="display: none;">
+  <p id="message"></p>
+</div>
+
+</body>
+<script>
+  $(document).ready(function () {
+      $('#loginForm').submit(function (event) {
+          event.preventDefault();  // Prevent default form submission
+
+          var name = $('#name').val();
+          var email = $('#email').val();
+
+          // Send login data to the server
+          $.ajax({
+              url: '/api/persons/login',
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({ name: name, email: email }),
+              success: function (response) {
+                  // Store the user's name in sessionStorage
+                  sessionStorage.setItem('userName', name);
+
+                  // Now call the get-id API to fetch the ID
+                  $.ajax({
+                      url: '/api/persons/get-id/' + name,  // Get ID based on the logged-in name
+                      type: 'GET',
+                      success: function (data) {
+                          // Store the ID in sessionStorage
+                          sessionStorage.setItem('userId', data.id);
+
+                          // Redirect to another page
+                          window.location.href = "welcome.html";  // Replace with your desired URL
+                      },
+                      error: function (xhr, status, error) {
+                          alert('Failed to get user ID.');
+                      }
+                  });
+              },
+              error: function (xhr, status, error) {
+                  $('#responseMessage').css('color', 'red').show();
+                  $('#responseMessage').text('Invalid credentials. Login failed.');
+              }
+          });
+      });
+  });
+</script>
+</html>
